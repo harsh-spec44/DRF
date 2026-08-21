@@ -9,6 +9,6 @@ def singleobj(request):
     print(serilaizer.data)
 
 def multiobj(request):
-    data = Person.objects.get(id=1)
+    data = Person.objects.all()
     serilaizer = PersonSerializer(data,many=True)
     print(serilaizer.data)
