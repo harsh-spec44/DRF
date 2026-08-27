@@ -7,13 +7,14 @@ import io
 from rest_framework.parsers import JSONParser
 from django.views.decorators.csrf import csrf_exempt
 from  rest_framework import status
+from django.shortcuts import get_object_or_404
 
 # Create your views here.
 
 @csrf_exempt
 def singleobj(request):
     
-    data = Person.objects.get(id=id)
+    data = get_object_or_404(Person, id=id)
 
     if request.method == "PUT":
         stream = io.BytesIO(request.body)
