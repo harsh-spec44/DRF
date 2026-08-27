@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from .models import Person
-from .serializers import PersonSerializer
+from .serializers import PersonSerializer, PersonModelSerializer
 from rest_framework.renderers import JSONRenderer
 from django.http import HttpResponse, JsonResponse
 import io
@@ -19,7 +19,7 @@ def singleobj(request):
     if request.method == "PUT":
         stream = io.BytesIO(request.body)
         parsed_data = JSONParser().parse(stream)
-        serilaizer = PersonSerializer(data,data=parsed_data)
+        serilaizer = PersonModelSerializer(data,data=parsed_data)
         if serilaizer.is_valid():
             serilaizer.save()
             return JsonResponse({'update':'success'})
@@ -28,13 +28,13 @@ def singleobj(request):
     if request.method == "PATCH":
         stream = io.BytesIO(request.body)
         parsed_data = JSONParser().parse(stream)
-        serilaizer = PersonSerializer(data,data=parsed_data, partial=True)
+        serilaizer = PersonModelSerializer(data,data=parsed_data, partial=True)
         if serilaizer.is_valid():
             serilaizer.save()
             return JsonResponse({'update':'success'})
         return JsonResponse(serilaizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    serilaizer = PersonSerializer(data)
+    serilaizer = PersonModelSerializer(data)
     return JsonResponse(serilaizer.data)
 
 @csrf_exempt
@@ -44,7 +44,7 @@ def multiobj(request):
         json = request.body
         stream = io.BytesIO(json)
         parsed_data = JSONParser().parse(stream)
-        serilaizer = PersonSerializer(data = parsed_data)
+        serilaizer = PersonModelSerializer(data = parsed_data)
         if serilaizer.is_valid():
             serilaizer.save()
             return JsonResponse({"create":"successfull"}, status=status.HTTP_201_CREATED)
@@ -52,5 +52,5 @@ def multiobj(request):
         return JsonResponse(serilaizer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     data = Person.objects.all()
-    serilaizer = PersonSerializer(data,many=True)
+    serilaizer = PersonModelSerializer(data,many=True)
     return JsonResponse(serilaizer.data, safe=False)
