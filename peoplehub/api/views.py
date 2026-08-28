@@ -9,9 +9,10 @@ from  rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework.views import APIView
 # Create your views here.
 
-@api_view(['GET','POST','PATCH'])
+@api_view(['GET','PUT','PATCH'])
 def singleobj(request, id):
     
     data = get_object_or_404(Person,id=id)
@@ -52,3 +53,43 @@ def multiobj(request):
      data = Person.objects.all()
      serilaizer = PersonModelSerializer(data,many=True)
      return Response(serilaizer.data)
+
+class MultipleObjAPIView(APIView):
+   
+   def get(self, request):
+     data = Person.objects.all()
+     serilaizer = PersonModelSerializer(data,many=True)
+     return Response(serilaizer.data)
+   
+   def post(self, request):
+      parsed_data = request.data
+      serilaizer = PersonModelSerializer(data = parsed_data)
+      serilaizer.is_valid(raise_exception=True)
+      serilaizer.save()
+      return Response({"create":"successfull"}, status=status.HTTP_201_CREATED)
+
+class SingleObjAPIView(APIView):
+    def get(self, request, id):
+        data = get_object_or_404(Person,id=id)
+        serilaizer = PersonModelSerializer
+        return Response(serilaizer.data)
+    
+    def put(self, request, id):
+        data = get_object_or_404(Person,id=id)
+        parsed_data = request.data
+        serilaizer = PersonModelSerializer(data,data=parsed_data)
+        if serilaizer.is_valid():
+            serilaizer.save()
+            return Response({'update':'success'})
+        return Response(serilaizer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def patch(self, request, id):
+         data = get_object_or_404(Person,id=id)
+         parsed_data = request.data
+         serilaizer = PersonModelSerializer(data,data=parsed_data, partial=True)
+         if serilaizer.is_valid():
+            serilaizer.save()
+            return Response({'update':'success'})
+         return Response(serilaizer.errors, status=status.HTTP_400_BAD_REQUEST)
+ 
+
