@@ -17,8 +17,7 @@ def singleobj(request, id):
     data = get_object_or_404(Person,id=id)
 
     if request.method == "PUT":
-        stream = io.BytesIO(request.body)
-        parsed_data = JSONParser().parse(stream)
+        parsed_data = request.data
         serilaizer = PersonModelSerializer(data,data=parsed_data)
         if serilaizer.is_valid():
             serilaizer.save()
@@ -26,8 +25,7 @@ def singleobj(request, id):
         return Response(serilaizer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     if request.method == "PATCH":
-         stream = io.BytesIO(request.body)
-         parsed_data = JSONParser().parse(stream)
+         parsed_data = request.data
          serilaizer = PersonModelSerializer(data,data=parsed_data, partial=True)
          if serilaizer.is_valid():
             serilaizer.save()
@@ -43,9 +41,7 @@ def singleobj(request, id):
 def multiobj(request):
 
     if request.method == "POST":
-        json = request.body
-        stream = io.BytesIO(json)
-        parsed_data = JSONParser().parse(stream)
+        parsed_data = request.data
         serilaizer = PersonModelSerializer(data = parsed_data)
         if serilaizer.is_valid():
             serilaizer.save()
