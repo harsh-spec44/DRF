@@ -43,13 +43,12 @@ def multiobj(request):
     if request.method == "POST":
         parsed_data = request.data
         serilaizer = PersonModelSerializer(data = parsed_data)
-        if serilaizer.is_valid():
-            serilaizer.save()
-            return Response({"create":"successfull"}, status=status.HTTP_201_CREATED)
-
-        return Response(serilaizer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serilaizer.is_valid(raise_exception=True)
+        serilaizer.save()
+        return Response({"create":"successfull"}, status=status.HTTP_201_CREATED)
 
     if request.method == 'GET':
+     print(request.accepted_renderer)
      data = Person.objects.all()
      serilaizer = PersonModelSerializer(data,many=True)
      return Response(serilaizer.data)
