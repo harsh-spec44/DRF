@@ -9,6 +9,7 @@ from rest_framework import status
 class LoginAPIView(APIView):
     authentication_classes = []
     permission_classes = []
+    
     def post(self, request):
         username = request.data.get('username')
         password = request.data.get('password')
@@ -19,5 +20,6 @@ class LoginAPIView(APIView):
             token, created = token.objects.get_or_create(user=user)
 
             return Response({'token':token.key})
+        
 
         return Response({'error': "Invalid Credentials"}, status=status.HTTP_401_UNAUTHORIZED)
