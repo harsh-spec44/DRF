@@ -1,17 +1,13 @@
 from django.shortcuts import render
 from .models import Person
-from .serializers import PersonSerializer, PersonModelSerializer
-from rest_framework.renderers import JSONRenderer
-import io
-from rest_framework.parsers import JSONParser
-from django.views.decorators.csrf import csrf_exempt
+from .serializers import PersonModelSerializer
 from  rest_framework import status
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework.views import APIView
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.mixins import CreateModelMixin,DestroyModelMixin,UpdateModelMixin,ListModelMixin,RetrieveModelMixin
+from rest_framework.authentication import TokenAuthentication
 # Create your views here.
 
 @api_view(['GET','PUT','PATCH'])
@@ -57,9 +53,9 @@ def multiobj(request):
      return Response(serilaizer.data)
 
 class MultipleObjAPIView(ListCreateAPIView):
+   authentication_classes = [TokenAuthentication]
    queryset = Person.objects.all()
    serializer_class = PersonModelSerializer
-
 
 class SingleObjAPIView(RetrieveUpdateDestroyAPIView):
    queryset = Person.objects.all()
