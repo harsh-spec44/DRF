@@ -123,10 +123,13 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES':[
         'rest_framework.authentication.TokenAuthentication'
     ],
-    'DEFAULT PERMISSIONS CLASSES':{
+    'DEFAULT PERMISSIONS CLASSES':[
         'rest_framework.permissions.IsAuthenticated'
-    }
+    ],
+    'DEFAULT_PAGINATION_CLASS':'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 2,
 }
+
 
 # Email
 # https://docs.djangoproject.com/en/6.1/topics/email/#topic-email-configuration
