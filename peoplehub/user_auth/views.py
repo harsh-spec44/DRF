@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import RegistrationUserSerializer
 # Create your views here.
-# GMC yukon denali ultimate - black, mercdes g63 amg - grey| blue, rr ghost - blue| brown, 12 cillindri , urus blue, bentley continental grey-black
 class LoginAPIView(APIView):
     authentication_classes = []
     permission_classes = []
